@@ -25,7 +25,13 @@ const getQuery = async (parseClass, _source, args, context, queryInfo, parseClas
     id = globalIdObject.id;
   }
 
-  const { keys, include } = extractKeysAndInclude(selectedFields);
+//   const { keys, include } = extractKeysAndInclude(selectedFields);
+  const { keys, include } = extractKeysAndInclude(
+    selectedFields
+      .filter(field => field.startsWith('edges.node.'))
+      .map(field => field.replace('edges.node.', ''))
+      .filter(field => field.indexOf('edges.node') < 0)
+  );
 
   return await objectsQueries.getObject(
     parseClass.className,
